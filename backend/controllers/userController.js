@@ -63,7 +63,7 @@ const loginUser = async (req, res) => {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
             res.json({ success: true, token })
         } else {
-            res.json({ success: false, message: "Invakid credentials" })
+            res.json({ success: false, message: "Invalid credentials" })
         }
 
     } catch (error) {
@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const userId = req.userId;  // from middleware
+    const userId = req.userId;  
     const userData = await userModel.findById(userId).select('-password');
 
     if (!userData) {
@@ -92,7 +92,9 @@ const getProfile = async (req, res) => {
 // Api to update user profile
 const updateProfile = async (req, res) => {
     try {
-        const { userId, name, phone, address, dob, gender } = req.body
+        const { name, phone, address, dob, gender } = req.body;
+        const userId = req.userId;
+        
         const imageFile = req.file
 
         if (!name || !phone || !dob || !gender) {
@@ -120,7 +122,7 @@ const updateProfile = async (req, res) => {
 
 const bookAppointment = async (req, res) => {
   try {
-    const userId = req.userId;   // ✅ from auth middleware, not from body
+    const userId = req.userId;   
     const { docId, slotDate, slotTime } = req.body;
 
     const docData = await doctorModel.findById(docId).select("-password");
