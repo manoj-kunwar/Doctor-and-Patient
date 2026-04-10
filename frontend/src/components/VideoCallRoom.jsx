@@ -10,7 +10,7 @@ const fmtDuration = (secs) => {
 const VideoCallRoom = ({ tokenData, role, backendUrl, onEnd }) => {
   const containerRef = useRef(null);
   const startTimeRef = useRef(null);
-  const timerRef    = useRef(null);
+  const timerRef     = useRef(null);
   const [elapsed,    setElapsed]    = useState(0);
   const [status,     setStatus]     = useState("Connecting…");
   const [callActive, setCallActive] = useState(false);
@@ -18,14 +18,12 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, onEnd }) => {
   useEffect(() => {
     if (!containerRef.current || !tokenData) return;
 
-    const { appId, roomId, userId, userName } = tokenData;
+    const { appId, serverSecret, roomId, userId, userName } = tokenData;
 
-    // ── Correct way: generate Kit Token using appId + serverSecret
-    // Since we can't expose serverSecret on frontend,
-    // we use generateKitTokenForProduction with our backend token
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+    // ✅ Correct — generateKitTokenForTest uses appId + serverSecret directly
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appId,
-      tokenData.token,
+      serverSecret,
       roomId,
       userId,
       userName
