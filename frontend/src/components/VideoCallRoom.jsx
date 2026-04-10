@@ -1,4 +1,3 @@
-// VideoCallRoom.jsx  — works with ZegoUIKitPrebuilt
 import React, { useEffect, useRef, useState } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
@@ -8,7 +7,7 @@ const fmtDuration = (secs) => {
   return `${m}:${s}`;
 };
 
-const VideoCallRoom = ({ tokenData, role, backendUrl, authToken, onEnd }) => {
+const VideoCallRoom = ({ tokenData, role, backendUrl, onEnd }) => {
   const containerRef = useRef(null);
   const startTimeRef = useRef(null);
   const timerRef    = useRef(null);
@@ -21,11 +20,12 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, authToken, onEnd }) => {
 
     const { appId, roomId, userId, userName } = tokenData;
 
-    // ── Generate Kit Token directly in the browser ──
-    // This is the correct way for ZegoUIKitPrebuilt
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+    // ── Correct way: generate Kit Token using appId + serverSecret
+    // Since we can't expose serverSecret on frontend,
+    // we use generateKitTokenForProduction with our backend token
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
       appId,
-      tokenData.token,   // server token we got from backend
+      tokenData.token,
       roomId,
       userId,
       userName
@@ -38,6 +38,7 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, authToken, onEnd }) => {
       scenario: { mode: ZegoUIKitPrebuilt.OneONoneCall },
       showPreJoinView: true,
       showScreenSharingButton: false,
+      showRoomDetailsButton: false,
       maxUsers: 2,
       onJoinRoom: () => {
         startTimeRef.current = Date.now();
@@ -75,18 +76,14 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, authToken, onEnd }) => {
       },
     });
 
-    return () => {
-      clearInterval(timerRef.current);
-    };
+    return () => { clearInterval(timerRef.current); };
   }, [tokenData]);
 
   return (
     <div className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col">
-
-      {/* Top bar */}
       <div className="flex items-center justify-between px-5 py-3 bg-[#111118] border-b border-white/10 shrink-0">
         <div className="flex items-center gap-3">
-          <span className="text-white font-bold text-base tracking-tight">CareOS</span>
+          <span className="text-white font-bold text-base">CareOS</span>
           <span className="w-px h-5 bg-white/20" />
           <span className="text-xs text-white/50">Secure Video Consultation</span>
         </div>
@@ -101,16 +98,12 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, authToken, onEnd }) => {
             callActive
               ? "bg-sky-500/15 border-sky-500/30 text-sky-400"
               : "bg-white/5 border-white/10 text-white/50"
-          }`}>
-            {status}
-          </div>
+          }`}>{status}</div>
         </div>
       </div>
 
-      {/* ZEGO container */}
       <div ref={containerRef} className="flex-1 overflow-hidden" />
 
-      {/* Bottom bar */}
       <div className="px-5 py-2 bg-[#111118] border-t border-white/10 flex items-center justify-between shrink-0">
         <span className="text-xs text-white/40">
           {role === "patient"
