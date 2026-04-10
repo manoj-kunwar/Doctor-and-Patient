@@ -138,39 +138,23 @@ import corsMiddleware from "./middlewares/corsMiddleware.js";
 const app = express();
 const port = process.env.PORT || 4000;
 
-/*
-========================================
-MIDDLEWARES
-========================================
-*/
+/* ----------------   MIDDLEWARES ------------------- */
 app.use(express.json());
 app.use(corsMiddleware);
 
-/*
-========================================
-ROUTES
-========================================
-*/
+/*---------------- ROUTES ---------------------------- */
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRoutes);
 app.use("/api/video", videoRouter);
 
-/*
-========================================
-HEALTH CHECK
-========================================
-*/
+/*------------------- HEALTH CHECK ---------------------- */
 app.get("/", (req, res) => {
   res.send("API is WORKING");
 });
 
-/*
-========================================
-SERVER START
-========================================
-*/
+/*--------------------- SERVER START --------------------- */
 const startServer = async () => {
   try {
     await connectDb();
