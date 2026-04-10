@@ -124,8 +124,10 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+
 import connectDb from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
+
 import adminRouter from "./routes/adminRoute.js";
 import doctorRouter from "./routes/doctorRoute.js";
 import userRouter from "./routes/userRouter.js";
@@ -135,35 +137,63 @@ import videoRouter from "./routes/videoRoute.js";
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middlewares
+/*
+========================================
+MIDDLEWARES
+========================================
+*/
 app.use(express.json());
 
-// ── CORS fix ──────────────────────────────────────────
-app.use(cors({
-  origin: "*",        // allows ALL origins (simplest fix)
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "token", "atoken", "dtoken"],
-  credentials: false, // must be false when origin is "*"
-}));
-// ─────────────────────────────────────────────────────
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // frontend
+      "http://localhost:5174", // admin
+      "https://careos-frontend.onrender.com",
+      "https://careos-admin.onrender.com",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "token",
+      "atoken",
+      "dtoken",
+    ],
+    credentials: true,
+  })
+);
 
-// Routes
+/*
+========================================
+ROUTES
+========================================
+*/
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 app.use("/api/contact", contactRoutes);
 app.use("/api/video", videoRouter);
 
-// Health check
+/*
+========================================
+HEALTH CHECK
+========================================
+*/
 app.get("/", (req, res) => {
   res.send("API is WORKING");
 });
 
-// Start server
+/*
+========================================
+SERVER START
+========================================
+*/
 const startServer = async () => {
   try {
     await connectDb();
     await connectCloudinary();
+
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });
@@ -174,3 +204,4 @@ const startServer = async () => {
 };
 
 startServer();
+
