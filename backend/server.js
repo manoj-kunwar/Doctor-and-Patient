@@ -122,7 +122,6 @@
 
 
 import express from "express";
-import cors from "cors";
 import "dotenv/config";
 
 import connectDb from "./config/mongodb.js";
@@ -134,6 +133,8 @@ import userRouter from "./routes/userRouter.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import videoRouter from "./routes/videoRoute.js";
 
+import corsMiddleware from "./middlewares/corsMiddleware.js";
+
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -143,26 +144,7 @@ MIDDLEWARES
 ========================================
 */
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173", // frontend
-      "http://localhost:5174", // admin
-      "https://careos-frontend.onrender.com",
-      "https://careos-admin.onrender.com",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "token",
-      "atoken",
-      "dtoken",
-    ],
-    credentials: true,
-  })
-);
+app.use(corsMiddleware);
 
 /*
 ========================================
