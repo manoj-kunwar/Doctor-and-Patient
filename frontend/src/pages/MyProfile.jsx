@@ -16,11 +16,10 @@ const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(false);
 
-  // ✅ LOCATION STATE
+
   const [location, setLocation] = useState(null);
   const [locationError, setLocationError] = useState("");
 
-  // ✅ GET REAL CURRENT LOCATION
   useEffect(() => {
     if (!navigator.geolocation) {
       setLocationError("Geolocation not supported");
