@@ -395,6 +395,11 @@ const Footer = () => {
       <li>Join as Doctor</li>
       <li>Health Records</li>
       <li>Patient Support</li>
+      <li onClick={() => window.open("http://localhost:5174", "_blank")}
+      className="cursor-pointer hover:text-green-400">
+      Admin Panel
+      </li>
+
     </ul>
   </div>
 
