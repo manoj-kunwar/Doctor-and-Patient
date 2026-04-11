@@ -156,7 +156,6 @@
 
 // export default Doctors;
 
-
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
@@ -191,14 +190,10 @@ const Doctors = () => {
   useEffect(() => {
     let filtered = doctors;
 
-    // Filter by speciality from route
     if (speciality) {
-      filtered = filtered.filter(
-        (doc) => doc.speciality === speciality
-      );
+      filtered = filtered.filter((doc) => doc.speciality === speciality);
     }
 
-    // Search by doctor name or speciality
     if (search) {
       filtered = filtered.filter(
         (doc) =>
@@ -207,45 +202,28 @@ const Doctors = () => {
       );
     }
 
-    // Filter by city
     if (city) {
       filtered = filtered.filter((doc) =>
-        doc.address?.city
-          ?.toLowerCase()
-          .includes(city.toLowerCase())
+        doc.address?.city?.toLowerCase().includes(city.toLowerCase())
       );
     }
 
-    // Filter by rating
     if (minRating) {
       filtered = filtered.filter(
         (doc) => (doc.rating || 0) >= Number(minRating)
       );
     }
 
-    // Filter by fee
     if (minFee) {
-      filtered = filtered.filter(
-        (doc) => doc.fees >= Number(minFee)
-      );
+      filtered = filtered.filter((doc) => doc.fees >= Number(minFee));
     }
 
     if (maxFee) {
-      filtered = filtered.filter(
-        (doc) => doc.fees <= Number(maxFee)
-      );
+      filtered = filtered.filter((doc) => doc.fees <= Number(maxFee));
     }
 
     setFilterDoc(filtered);
-  }, [
-    doctors,
-    speciality,
-    search,
-    city,
-    minRating,
-    minFee,
-    maxFee,
-  ]);
+  }, [doctors, speciality, search, city, minRating, minFee, maxFee]);
 
   const clearFilters = () => {
     setSearch("");
@@ -258,162 +236,168 @@ const Doctors = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Search Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-teal-50 mt-10 py-14 px-6">
-        <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">
+
+      {/* ── Hero Search ── */}
+      <div className="bg-gradient-to-br from-blue-50 via-white to-teal-50 py-14 px-6 mt-10">
+        <h1 className="text-4xl font-semibold text-center text-gray-900 mb-2">
           Find Your Doctor
         </h1>
+        <p className="text-center text-gray-500 mb-8 text-sm">
+          Book appointments with top-rated specialists near you
+        </p>
 
-        <div className="max-w-2xl mx-auto bg-white rounded-full shadow-sm flex items-center px-10 py-2">
+        <div className="max-w-2xl mx-auto flex items-center bg-white border border-gray-200 rounded-full shadow-sm px-5 py-1.5 gap-3">
+          <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+          </svg>
           <input
             type="text"
             placeholder="Search by name or speciality..."
-            className="flex-1 outline-none text-gray-600"
+            className="flex-1 outline-none text-sm text-gray-700 py-2 bg-transparent placeholder-gray-400"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold">
+          <button className="bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all text-white text-sm font-medium px-6 py-2.5 rounded-full">
             Search
           </button>
         </div>
       </div>
 
-      {/* Main Layout */}
-      <div className="flex flex-col lg:flex-row gap-8 px-8 py-8">
-        {/* Left Sidebar */}
-        <div className="w-full lg:w-72 bg-white rounded-2xl shadow-sm border p-6 h-fit">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-bold text-xl">Filters</h2>
-            <button
-              onClick={clearFilters}
-              className="text-sm text-gray-500 hover:text-primary"
-            >
-              Clear
-            </button>
-          </div>
+      {/* ── Main Layout ── */}
+      <div className="flex flex-col lg:flex-row gap-6 px-6 py-8 max-w-screen-xl mx-auto">
 
-          {/* Specialty */}
-          <div className="mb-5">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Specialty
-            </label>
-            <select
-              className="w-full border rounded-xl px-4 py-3 outline-none"
-              value={speciality || ""}
-              onChange={(e) =>
-                e.target.value
-                  ? navigate(`/doctors/${e.target.value}`)
-                  : navigate("/doctors")
-              }
-            >
-              <option value="">Select Specialty</option>
-              {specialities.map((spec) => (
-                <option key={spec} value={spec}>
-                  {spec}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* ── Sidebar ── */}
+        <aside className="w-full lg:w-64 flex-shrink-0">
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm sticky top-6">
 
-          {/* City */}
-          <div className="mb-5">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              City
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Mumbai"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3 outline-none"
-            />
-          </div>
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="font-semibold text-gray-800 text-base">Filters</h2>
+              <button
+                onClick={clearFilters}
+                className="text-xs text-blue-500 hover:text-blue-700 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
+              >
+                Clear all
+              </button>
+            </div>
 
-          {/* Rating */}
-          <div className="mb-5">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Min Rating
-            </label>
-            <select
-              value={minRating}
-              onChange={(e) => setMinRating(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3 outline-none"
-            >
-              <option value="">Any Rating</option>
-              <option value="4">4+</option>
-              <option value="3">3+</option>
-              <option value="2">2+</option>
-            </select>
-          </div>
+            {/* Specialty */}
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                Specialty
+              </label>
+              <select
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white"
+                value={speciality || ""}
+                onChange={(e) =>
+                  e.target.value
+                    ? navigate(`/doctors/${e.target.value}`)
+                    : navigate("/doctors")
+                }
+              >
+                <option value="">All Specialties</option>
+                {specialities.map((spec) => (
+                  <option key={spec} value={spec}>
+                    {spec}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Fee Range */}
-          <div className="mb-5">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Fee Range (₹)
-            </label>
-            <div className="flex gap-3">
+            {/* City */}
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                City
+              </label>
               <input
-                type="number"
-                placeholder="Min"
-                value={minFee}
-                onChange={(e) => setMinFee(e.target.value)}
-                className="w-1/2 border rounded-xl px-4 py-3 outline-none"
-              />
-              <input
-                type="number"
-                placeholder="Max"
-                value={maxFee}
-                onChange={(e) => setMaxFee(e.target.value)}
-                className="w-1/2 border rounded-xl px-4 py-3 outline-none"
+                type="text"
+                placeholder="e.g. Mumbai"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
               />
             </div>
-          </div>
 
-          {/* Quick Filters */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Quick Filters
-            </label>
+            {/* Rating */}
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                Min Rating
+              </label>
+              <select
+                value={minRating}
+                onChange={(e) => setMinRating(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white"
+              >
+                <option value="">Any Rating</option>
+                <option value="4">⭐ 4+ Stars</option>
+                <option value="3">⭐ 3+ Stars</option>
+                <option value="2">⭐ 2+ Stars</option>
+              </select>
+            </div>
 
-            <div className="flex flex-wrap gap-2">
-              {[
-                "Cardiologist",
-                "Dermatologist",
-                "Neurologist",
-                "Orthopedic",
-                "Pediatricians",
-              ].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => navigate(`/doctors/${item}`)}
-                  className={`px-3 py-1 rounded-full border text-sm transition ${
-                    speciality === item
-                      ? "bg-primary text-white"
-                      : "bg-white hover:bg-primary/5"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
+            {/* Fee Range */}
+            <div className="mb-5">
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                Fee Range (₹)
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={minFee}
+                  onChange={(e) => setMinFee(e.target.value)}
+                  className="w-1/2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                />
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={maxFee}
+                  onChange={(e) => setMaxFee(e.target.value)}
+                  className="w-1/2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                />
+              </div>
+            </div>
+
+            {/* Quick Filters */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                Quick Filters
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {["Cardiologist", "Dermatologist", "Neurologist", "Orthopedic", "Pediatricians"].map(
+                  (item) => (
+                    <button
+                      key={item}
+                      onClick={() => navigate(`/doctors/${item}`)}
+                      className={`px-3 py-1 rounded-full border text-xs font-medium transition ${
+                        speciality === item
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </aside>
 
-        {/* Right Side Results */}
-        <div className="flex-1">
-          <h2 className="text-3xl font-bold mb-2">
-            {filterDoc.length} Doctors Found
-          </h2>
-
-          {speciality && (
-            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 rounded-full text-sm mb-10">
-              {speciality}
-            </span>
-          )}
+        {/* ── Results ── */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              {filterDoc.length} Doctors Found
+            </h2>
+            {speciality && (
+              <span className="px-3 py-1 bg-blue-50 text-blue-600 border border-blue-100 rounded-full text-xs font-medium">
+                {speciality}
+              </span>
+            )}
+          </div>
 
           {filterDoc.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {filterDoc.map((item, index) => (
                 <div
                   key={index}
@@ -421,38 +405,83 @@ const Doctors = () => {
                     navigate(`/appointment/${item._id}`);
                     window.scrollTo(0, 0);
                   }}
-                  className="bg-white rounded-2xl border shadow-sm hover:shadow-md cursor-pointer overflow-hidden"
+                  className="bg-white border border-gray-100 rounded-2xl overflow-hidden cursor-pointer hover:shadow-md hover:border-gray-200 transition-all duration-200 group"
                 >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-56 object-cover"
-                  />
+                  {/* Image */}
+                  <div className="relative h-52 bg-gray-100 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    />
 
+                    {/* Available badge */}
+                    <span
+                      className={`absolute top-3 right-3 text-xs font-medium px-2.5 py-1 rounded-full ${
+                        item.available
+                          ? "bg-green-50 text-green-700 border border-green-200"
+                          : "bg-yellow-50 text-yellow-700 border border-yellow-200"
+                      }`}
+                    >
+                      {item.available ? "● Available" : "● Busy"}
+                    </span>
+
+                    {/* Experience badge */}
+                    {item.experience && (
+                      <span className="absolute bottom-3 left-3 text-xs bg-black/50 text-white px-2 py-0.5 rounded-md">
+                        {item.experience}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
                   <div className="p-4">
-                    <p className="font-bold text-lg">{item.name}</p>
-                    <p className="text-primary text-sm">
-                      {item.speciality}
+                    <p className="font-semibold text-gray-900 text-base leading-tight">
+                      {item.name}
                     </p>
-                    <p className="text-sm text-gray-400 mt-2">
-                      {item.degree}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      ₹{item.fees}
-                    </p>
+                    <p className="text-blue-600 text-sm mt-0.5">{item.speciality}</p>
+                    <p className="text-xs text-gray-400 mt-1">{item.degree}</p>
+
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                      <span className="text-sm font-semibold text-gray-800">
+                        ₹{item.fees}
+                      </span>
+
+                      {item.rating && (
+                        <span className="flex items-center gap-1 text-xs text-gray-500">
+                          <span className="text-amber-400">★</span>
+                          {item.rating}
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/appointment/${item._id}`);
+                        window.scrollTo(0, 0);
+                      }}
+                      className="mt-3 w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-medium rounded-xl transition-all"
+                    >
+                      Book Appointment
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[500px] text-gray-400">
-              <div className="text-6xl mb-4">🔍</div>
-              <p className="text-3xl font-semibold">
-                No doctors found
-              </p>
-              <p className="text-lg mt-2">
+            <div className="flex flex-col items-center justify-center h-96 text-gray-400">
+              <div className="text-5xl mb-4">🔍</div>
+              <p className="text-xl font-semibold text-gray-500">No doctors found</p>
+              <p className="text-sm mt-1 text-gray-400">
                 Try adjusting your filters or search terms
               </p>
+              <button
+                onClick={clearFilters}
+                className="mt-5 px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-full hover:bg-blue-700 transition"
+              >
+                Clear Filters
+              </button>
             </div>
           )}
         </div>
