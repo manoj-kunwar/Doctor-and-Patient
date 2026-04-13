@@ -482,6 +482,7 @@
 
 // export default Appointment;
 
+
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
@@ -506,9 +507,19 @@ const Appointment = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime,  setSlotTime]  = useState("");
 
-  const fetchDocInfo = () => {
-    const doc = doctors.find(d => d._id === docId || d.id === docId);
-    setDocInfo(doc);
+  // Fetch doctor directly from API so averageRating is always fresh
+  const fetchDocInfo = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/doctor/list");
+      if (data.success) {
+        const doc = data.doctors.find(d => d._id === docId || d.id === docId);
+        setDocInfo(doc);
+      }
+    } catch (err) {
+      // fallback to context cache
+      const doc = doctors.find(d => d._id === docId || d.id === docId);
+      setDocInfo(doc);
+    }
   };
 
   const getAvailableSlots = () => {
@@ -547,7 +558,7 @@ const Appointment = () => {
     } catch (err) { toast.error(err.message); }
   };
 
-  useEffect(() => { fetchDocInfo(); },           [doctors, docId]);
+  useEffect(() => { fetchDocInfo(); }, [docId]);
   useEffect(() => { if (docInfo) getAvailableSlots(); }, [docInfo]);
 
   if (!docInfo) {
@@ -667,13 +678,13 @@ const Appointment = () => {
         </div>
       </div>
 
+      {/* Reviews Section — individual per doctor, above Related Doctors */}
+      <ReviewSection doctorId={docId} onReviewChange={fetchDocInfo} />
+
       {/* Related Doctors */}
-      <div className="mt-20">
+      <div className="mt-10">
         <RelatedDoctor docId={docId} speciality={docInfo.speciality} />
       </div>
-
-      {/* Reviews Section — any logged-in patient can review */}
-      <ReviewSection doctorId={docId} />
 
     </div>
   );
