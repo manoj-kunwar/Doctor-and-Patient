@@ -360,7 +360,7 @@ const AddDoctor = () => {
                 <div>
                   <label className={label}>Experience</label>
                   <select value={experience} onChange={(e) => setExperience(e.target.value)} className={field}>
-                    {Array.from({ length: 15 }, (_, i) => (
+                    {Array.from({ length: 50 }, (_, i) => (
                       <option key={i + 1} value={`${i + 1} Year`}>{i + 1} Year{i > 0 ? "s" : ""}</option>
                     ))}
                   </select>
