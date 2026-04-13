@@ -299,7 +299,7 @@ import doctorRouter from "./routes/doctorRoute.js";
 import userRouter from "./routes/userRouter.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import videoRouter from "./routes/videoRoute.js";
-import reviewRouter from "./routes/reviewRoute.js";
+import reviewRouter from "./routes/reviewsRoute.js";
 
  
 const app = express();
