@@ -9,19 +9,17 @@ import {
   adminGetAllReviews,
   adminToggleReview,
   adminDeleteReview,
-} from "../controllers/reviewController.js"
+} from "../controllers/reviewController.js";
 
-const reviewRoute = express.Router();
+const reviewRouter = express.Router();
 
-// ── Patient routes ───────────────────────────────────────────────────────────
-reviewRoute.post("/add",            authUser,  addReview);    // POST /api/reviews/add
-reviewRoute.get("/:doctorId",                  getReviews);   // GET  /api/reviews/:doctorId
-reviewRoute.put("/:id",             authUser,  editReview);   // PUT  /api/reviews/:id
-reviewRoute.delete("/:id",          authUser,  deleteReview); // DELETE /api/reviews/:id
+reviewRouter.post("/add",          authUser,  addReview);
+reviewRouter.get("/:doctorId",               getReviews);
+reviewRouter.put("/:id",           authUser,  editReview);
+reviewRouter.delete("/:id",        authUser,  deleteReview);
 
-// ── Admin routes ─────────────────────────────────────────────────────────────
-reviewRoute.get("/admin/all",       authAdmin, adminGetAllReviews);
-reviewRoute.post("/admin/toggle",   authAdmin, adminToggleReview);
-reviewRoute.delete("/admin/:id",    authAdmin, adminDeleteReview);
+reviewRouter.get("/admin/all",     authAdmin, adminGetAllReviews);
+reviewRouter.post("/admin/toggle", authAdmin, adminToggleReview);
+reviewRouter.delete("/admin/:id",  authAdmin, adminDeleteReview);
 
-export default reviewRoute;
+export default reviewRouter;
