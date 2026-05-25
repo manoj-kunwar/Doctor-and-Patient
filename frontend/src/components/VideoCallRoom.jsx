@@ -20,7 +20,7 @@ const VideoCallRoom = ({ tokenData, role, backendUrl, onEnd }) => {
 
     const { appId, serverSecret, roomId, userId, userName } = tokenData;
 
-    // ✅ Correct — generateKitTokenForTest uses appId + serverSecret directly
+    //  generateKitTokenForTest uses appId + serverSecret directly
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appId,
       serverSecret,
