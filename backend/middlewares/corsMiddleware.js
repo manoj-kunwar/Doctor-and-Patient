@@ -10,7 +10,7 @@ const corsMiddleware = cors({
     "atoken",
     "dtoken",
   ],
-  credentials: false,  // ← must be false when origin is "*"
+  credentials: false, 
 });
 
 export default corsMiddleware;
