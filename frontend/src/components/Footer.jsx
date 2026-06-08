@@ -72,11 +72,16 @@ const Footer = () => {
               <li>Join as Doctor</li>
               <li>Health Records</li>
               <li>Patient Support</li>
-              <li
-                onClick={() => window.open("http://localhost:5174", "_blank")}
-                className="cursor-pointer hover:text-green-400"
-              >
-                Admin Panel
+          
+              <li>
+                <a
+                  href="https://doctor-and-patient-admin.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400"
+                >
+                  Admin Panel
+                </a>
               </li>
             </ul>
           </div>
